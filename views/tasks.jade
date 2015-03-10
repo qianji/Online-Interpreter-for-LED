@@ -1,0 +1,34 @@
+extends layout
+
+block content
+
+  .menu
+    h2 Menu
+    ul.nav.nav-pills
+      li
+        a(href='/') Home
+      li.active
+        a(href='/tasks') Intepreter
+  h1= ""
+
+  .list
+    .item.add-task
+      form(action='/tasks', method='post')
+        input(type='hidden', value=locals._csrf, name='_csrf')
+        div.name
+          input(type='text', name='name', placeholder='Enter the expression')
+        div.delete
+          input.btn.btn-primary.btn-sm(type="submit", value='Evaluate')
+    if (tasks.length === 0)
+      | No expressions.
+    each task, index in tasks
+      .item
+        div.name
+          //- span.name=task.name + ' (Created at: ' + moment(task.createTime).format("YYYY/MM/DD") + ')'
+          span.name=task.name
+          //- no support for DELETE method in forms
+          //- http://amundsen.com/examples/put-delete-forms/
+          //- so do XHR request instead from public/javascripts/main.js
+        div.delete
+          a(class='btn btn-danger btn-xs task-delete', data-task-id=task._id.toString(), data-csrf=locals._csrf) delete
+
